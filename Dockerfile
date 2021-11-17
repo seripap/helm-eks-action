@@ -13,7 +13,11 @@ RUN chmod +x /usr/bin/aws-iam-authenticator
 RUN wget https://get.helm.sh/helm-v3.6.2-linux-amd64.tar.gz -O - | tar -xzO linux-amd64/helm > /usr/local/bin/helm 
 RUN chmod +x /usr/local/bin/helm
 
-RUN helm plugin install https://github.com/codacy/helm-ssm
+ENV HELM_PLUGIN_DIR /.helm/plugins/helm-diff
+RUN helm plugin install https://github.com/seripap/helm-ssm
+#RUN wget https://github.com/codacy/helm-ssm/releases/download/3.1.9/helm-ssm-linux.tgz
+#RUN echo $HELM_PLUGINS
+#RUN tar xf helm-ssm-linux -C "$HELM_PLUGINS/helm-ssm"
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]:
