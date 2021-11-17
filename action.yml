@@ -5,9 +5,9 @@ branding:
   color: "blue"
 inputs:
   plugins:
-    description: "Plugins array"
+    description: "Plugins, comma separated"
     required: false
-    default: []
+    default: ""
   command:
     description: "Your command (kubectl or helm)"
     required: true
@@ -19,4 +19,3 @@ runs:
   image: "Dockerfile"
   args:
     - ${{ inputs.command }}
-

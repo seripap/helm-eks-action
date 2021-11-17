@@ -4,7 +4,7 @@ Github Action for executing Helm commands on EKS (using aws-iam-authenticator).
 
 The Helm version installed is Helm3.
 
-This action was inspired by [kubernetes-action](https://github.com/Jberlinsky/kubernetes-action).
+This action was inspired by [kubernetes-action](h]ttps://github.com/Jberlinsky/kubernetes-action).
 
 # Instructions
 
@@ -44,7 +44,7 @@ jobs:
 
 ## Helm plugins
 
-Provide a `plugins` array within the job `with` to install helm plugins. This should be the plugin name itself (`helm plugin install <the-plugin>`)
+Provide a `plugins` list within the job `with` to install helm plugins. This should be the plugin name itself (`helm plugin install <the-plugin>`). Plugins should be a comma separated string value.
 
 ```yaml
 - name: helm deploy
@@ -52,7 +52,7 @@ Provide a `plugins` array within the job `with` to install helm plugins. This sh
   env:
     KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
   with:
-    plugins: ["https://github.com/codacy/helm-ssm"]
+    plugins: "https://github.com/codacy/helm-ssm,another-plugin"
     command: helm upgrade <release name> --install --wait <chart> -f <path to values.yaml>
 ```
 
