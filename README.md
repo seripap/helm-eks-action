@@ -1,5 +1,6 @@
 # helm-eks-action
-Github Action for  executing Helm commands on EKS (using aws-iam-authenticator).
+
+Github Action for executing Helm commands on EKS (using aws-iam-authenticator).
 
 The Helm version installed is Helm3.
 
@@ -15,10 +16,10 @@ This Github Action was created with EKS in mind, therefore the following example
 name: deploy
 
 on:
-    push:
-        branches:
-            - master
-            - develop
+  push:
+    branches:
+      - master
+      - develop
 
 jobs:
   deploy:
@@ -41,39 +42,52 @@ jobs:
           command: helm upgrade <release name> --install --wait <chart> -f <path to values.yaml>
 ```
 
+## Helm plugins
+
+Provide a `plugins` array within the job `with` to install helm plugins. This should be the plugin name itself (`helm plugin install <the-plugin>`)
+
+```yaml
+- name: helm deploy
+  uses: koslib/helm-eks-action@master
+  env:
+    KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+  with:
+    plugins: ["https://github.com/codacy/helm-ssm"]
+    command: helm upgrade <release name> --install --wait <chart> -f <path to values.yaml>
+```
+
 # Response
 
 Use the output of your command in later steps
 
 ```yaml
-    steps:
-      - name: Get URL
-        id: url
-        uses: koslib/helm-eks-action@master
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-        with:
-          command: kubectl get svc my_svc -o json | jq -r '.status.loadBalancer.ingress[0].hostname'
+steps:
+  - name: Get URL
+    id: url
+    uses: koslib/helm-eks-action@master
+    env:
+      KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+    with:
+      command: kubectl get svc my_svc -o json | jq -r '.status.loadBalancer.ingress[0].hostname'
 
-      - name: Print Response
-        run: echo "Response was ${{ steps.url.outputs.response }}"
-
+  - name: Print Response
+    run: echo "Response was ${{ steps.url.outputs.response }}"
 ```
 
 # Secrets
 
 Create a GitHub Secret for each of the following values:
 
-* `KUBE_CONFIG_DATA`
-Your kube config file in base64-encrypted form. You can do that with
+- `KUBE_CONFIG_DATA`
+  Your kube config file in base64-encrypted form. You can do that with
 
 ```
 cat $HOME/.kube/config | base64
 ```
 
-* `AWS_ACCESS_KEY_ID`
+- `AWS_ACCESS_KEY_ID`
 
-* `AWS_SECRET_ACCESS_KEY`
+- `AWS_SECRET_ACCESS_KEY`
 
 # Contributions
 
